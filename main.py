@@ -1,5 +1,8 @@
 import config
 import requests
+from twilio.rest import Client
+
+client = Client(config.twilio_SID, config.twilio_auth_token)
 
 LAT: float = 39.738449
 LON: float = -104.984848
@@ -15,10 +18,9 @@ def fetch_weather_data():
 
 
 def check_weather(data: str):
-    if data == 'rain':
-        print('raining today!')
-    else:
-        print('no rain today')
+    message = client.messages.create(body=f"{data}", from_=config.twilio_phone_number, to=config.personal_number)
+
+    print(message.sid)
 
 
 check_weather(fetch_weather_data())
